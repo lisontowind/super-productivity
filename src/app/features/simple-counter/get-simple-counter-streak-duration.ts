@@ -61,7 +61,7 @@ const calculateWeeklyFrequencyStreak = (simpleCounter: SimpleCounterCopy): numbe
   );
 
   let totalCompletedDays = 0;
-  let weekStart = new Date(currentWeekStart);
+  const weekStart = new Date(currentWeekStart);
 
   // If current week hasn't met the requirement yet, start from previous week
   const isCurrentWeekMet = currentWeekCount >= streakWeeklyFrequency;

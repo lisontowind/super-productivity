@@ -456,7 +456,6 @@ describe('getSimpleCounterStreakDuration()', () => {
     });
 
     it('should return 1 week streak for current week with 3 completions (frequency = 3)', () => {
-      const today = new Date();
       const counter: Partial<SimpleCounterCopy> = {
         id: '1',
         countOnDay: {
@@ -473,7 +472,6 @@ describe('getSimpleCounterStreakDuration()', () => {
     });
 
     it('should return 1 for last week with 3 completions when current week is incomplete', () => {
-      const today = new Date();
       const counter: Partial<SimpleCounterCopy> = {
         id: '1',
         countOnDay: {

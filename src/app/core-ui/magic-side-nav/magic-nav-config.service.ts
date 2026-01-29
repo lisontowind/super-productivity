@@ -410,7 +410,7 @@ export class MagicNavConfigService {
     items.push({
       type: 'route',
       id: 'habits',
-      label: 'Habits',
+      label: T.MH.HABITS,
       icon: 'repeat',
       route: '/habits',
     });

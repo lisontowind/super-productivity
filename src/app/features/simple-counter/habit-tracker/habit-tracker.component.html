@@ -4,7 +4,7 @@
       <button
         mat-icon-button
         (click)="prevWeek()"
-        [matTooltip]="'Previous week'"
+        [matTooltip]="T.F.SIMPLE_COUNTER.HABIT_TRACKER.PREV_WEEK | translate"
       >
         <mat-icon>chevron_left</mat-icon>
       </button>
@@ -12,7 +12,7 @@
       <button
         mat-icon-button
         (click)="nextWeek()"
-        [matTooltip]="'Next week'"
+        [matTooltip]="T.F.SIMPLE_COUNTER.HABIT_TRACKER.NEXT_WEEK | translate"
         [disabled]="dayOffset() >= 0"
       >
         <mat-icon>chevron_right</mat-icon>
@@ -24,7 +24,7 @@
       class="today-btn"
       [disabled]="dayOffset() === 0"
     >
-      Today
+      {{ T.F.SIMPLE_COUNTER.HABIT_TRACKER.TODAY | translate }}
     </button>
   </div>
 
