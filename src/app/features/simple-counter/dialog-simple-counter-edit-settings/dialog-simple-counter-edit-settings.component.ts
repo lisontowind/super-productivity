@@ -95,11 +95,13 @@ export class DialogSimpleCounterEditSettingsComponent {
       type: counter.type,
       isTrackStreaks: counter.isTrackStreaks,
       streakMinValue: counter.streakMinValue,
+      streakMode: counter.streakMode || 'specific-days',
       streakWeekDays: counter.streakWeekDays
         ? { ...counter.streakWeekDays }
         : counter.isTrackStreaks
           ? { ...EMPTY_SIMPLE_COUNTER.streakWeekDays }
           : undefined,
+      streakWeeklyFrequency: counter.streakWeeklyFrequency,
       countdownDuration: counter.countdownDuration,
     };
   }
@@ -114,17 +116,21 @@ export class DialogSimpleCounterEditSettingsComponent {
       type: settings.type,
       isTrackStreaks: settings.isTrackStreaks,
       streakMinValue: settings.streakMinValue,
+      streakMode: settings.streakMode || 'specific-days',
       streakWeekDays: settings.streakWeekDays
         ? { ...settings.streakWeekDays }
         : settings.isTrackStreaks
           ? { ...EMPTY_SIMPLE_COUNTER.streakWeekDays }
           : undefined,
+      streakWeeklyFrequency: settings.streakWeeklyFrequency,
       countdownDuration: settings.countdownDuration ?? undefined,
     };
 
     if (!normalized.isTrackStreaks) {
       normalized.streakWeekDays = undefined;
       normalized.streakMinValue = undefined;
+      normalized.streakMode = undefined;
+      normalized.streakWeeklyFrequency = undefined;
     }
 
     if (
@@ -140,6 +146,7 @@ export class DialogSimpleCounterEditSettingsComponent {
   private _cloneSettings(settings: SimpleCounterCfgFields): SimpleCounterCfgFields {
     return {
       ...settings,
+      streakMode: settings.streakMode || 'specific-days',
       streakWeekDays: settings.streakWeekDays
         ? { ...settings.streakWeekDays }
         : settings.isTrackStreaks

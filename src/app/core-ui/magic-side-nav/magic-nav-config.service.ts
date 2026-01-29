@@ -407,6 +407,14 @@ export class MagicNavConfigService {
       });
     }
 
+    items.push({
+      type: 'route',
+      id: 'habits',
+      label: 'Habits',
+      icon: 'repeat',
+      route: '/habits',
+    });
+
     return items;
   }
 
