@@ -134,7 +134,6 @@ export class HabitTrackerComponent {
     this._matDialog.open(DialogSimpleCounterEditComponent, {
       data: { simpleCounter: counterCopy, selectedDate: date },
       restoreFocus: true,
-      width: '600px',
     });
   }
 

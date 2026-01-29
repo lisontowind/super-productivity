@@ -468,7 +468,7 @@ describe('getSimpleCounterStreakDuration()', () => {
         streakMinValue: 1,
         streakWeeklyFrequency: 3,
       };
-      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(0);
+      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(3);
     });
 
     it('should return 1 for last week with 3 completions when current week is incomplete', () => {
@@ -487,18 +487,40 @@ describe('getSimpleCounterStreakDuration()', () => {
         streakMinValue: 1,
         streakWeeklyFrequency: 3,
       };
-      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(1);
+      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(4);
     });
 
-    it('should return 2 for two consecutive weeks with frequency met', () => {
+    it('should return 5 days when previous week failed frequency (2 days) and last week met it (5 days)', () => {
       const counter: Partial<SimpleCounterCopy> = {
         id: '1',
         countOnDay: {
-          // Two weeks ago - 3 completions
+          // Two weeks ago - 2 completions (FAILS frequency of 3)
+          [getDbDateStr(new Date(Date.now() - 14 * 24 * 60 * 60 * 1000))]: 1,
+          [getDbDateStr(new Date(Date.now() - 15 * 24 * 60 * 60 * 1000))]: 1,
+          // Last week - 5 completions (MEETS frequency of 3)
+          [getDbDateStr(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))]: 1,
+          [getDbDateStr(new Date(Date.now() - 8 * 24 * 60 * 60 * 1000))]: 1,
+          [getDbDateStr(new Date(Date.now() - 9 * 24 * 60 * 60 * 1000))]: 1,
+          [getDbDateStr(new Date(Date.now() - 10 * 24 * 60 * 60 * 1000))]: 1,
+          [getDbDateStr(new Date(Date.now() - 11 * 24 * 60 * 60 * 1000))]: 1,
+        },
+        isTrackStreaks: true,
+        streakMode: 'weekly-frequency',
+        streakMinValue: 1,
+        streakWeeklyFrequency: 3,
+      };
+      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(5);
+    });
+
+    it('should return 7 days when previous week met frequency (3 days) and last week met it (4 days)', () => {
+      const counter: Partial<SimpleCounterCopy> = {
+        id: '1',
+        countOnDay: {
+          // Two weeks ago - 3 completions (MEETS frequency of 3)
           [getDbDateStr(new Date(Date.now() - 14 * 24 * 60 * 60 * 1000))]: 1,
           [getDbDateStr(new Date(Date.now() - 15 * 24 * 60 * 60 * 1000))]: 1,
           [getDbDateStr(new Date(Date.now() - 16 * 24 * 60 * 60 * 1000))]: 1,
-          // Last week - 4 completions (more than required)
+          // Last week - 4 completions (MEETS frequency of 3)
           [getDbDateStr(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))]: 1,
           [getDbDateStr(new Date(Date.now() - 8 * 24 * 60 * 60 * 1000))]: 1,
           [getDbDateStr(new Date(Date.now() - 9 * 24 * 60 * 60 * 1000))]: 1,
@@ -509,7 +531,7 @@ describe('getSimpleCounterStreakDuration()', () => {
         streakMinValue: 1,
         streakWeeklyFrequency: 3,
       };
-      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(2);
+      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(7);
     });
 
     it('should break streak if one week does not meet frequency', () => {
@@ -533,7 +555,7 @@ describe('getSimpleCounterStreakDuration()', () => {
         streakMinValue: 1,
         streakWeeklyFrequency: 3,
       };
-      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(1);
+      expect(getSimpleCounterStreakDuration(counter as SimpleCounterCopy)).toBe(3);
     });
 
     it('should respect streakMinValue for completion threshold', () => {
