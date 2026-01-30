@@ -7,6 +7,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
+  SimpleCounter,
   SimpleCounterCfgFields,
   SimpleCounterCopy,
   SimpleCounterType,
@@ -77,7 +78,7 @@ export class DialogSimpleCounterEditSettingsComponent {
       this._simpleCounterService.addSimpleCounter({
         ...this.dialogData.simpleCounter,
         ...normalized,
-      } as any);
+      } as SimpleCounter);
     }
     this._dialogRef.close(normalized);
   }
