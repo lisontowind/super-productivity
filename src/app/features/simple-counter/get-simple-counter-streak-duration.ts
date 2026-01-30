@@ -85,6 +85,12 @@ const calculateWeeklyFrequencyStreak = (simpleCounter: SimpleCounterCopy): numbe
     return totalCompletedDays + currentWeekCount;
   }
 
+  // When no weeks have met the frequency requirement yet (totalCompletedDays = 0),
+  // we intentionally return the current week's count to encourage users.
+  // This shows progress even when they haven't completed a full week yet,
+  // providing positive reinforcement for building the habit.
+  // Example: With streakWeeklyFrequency=5 and only 2 completions this week,
+  // this returns 2 (not 0) to show the user they're making progress.
   return totalCompletedDays || currentWeekCount;
 };
 
