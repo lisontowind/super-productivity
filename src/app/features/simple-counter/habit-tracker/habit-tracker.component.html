@@ -64,7 +64,7 @@
           } @else if (counter.icon) {
             <mat-icon class="habit-icon">{{ counter.icon }}</mat-icon>
           } @else {
-            <mat-icon class="habit-icon">check_box_outline_blank</mat-icon>
+            <div class="habit-initial">{{ counter.title.charAt(0).toUpperCase() }}</div>
           }
           <span class="habit-name">{{ counter.title }}</span>
         </div>
