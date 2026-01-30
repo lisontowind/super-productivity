@@ -432,6 +432,19 @@ describe('getSimpleCounterStreakDuration()', () => {
   });
 
   describe('weekly-frequency mode (new behavior)', () => {
+    // Use a fixed reference date (Thursday, 2026-01-30 12:00:00) to ensure deterministic test results
+    // regardless of what day of the week the tests actually run
+    const FIXED_REFERENCE_DATE = new Date('2026-01-30T12:00:00.000Z');
+
+    beforeEach(() => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(FIXED_REFERENCE_DATE);
+    });
+
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+
     it('should return 0 if no frequency specified', () => {
       const counter: Partial<SimpleCounterCopy> = {
         id: '1',
