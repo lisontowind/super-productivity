@@ -83,11 +83,13 @@ export class HabitTrackerComponent {
   });
 
   prevWeek(): void {
-    this.dayOffset.update((offset) => offset - 7);
+    const step = this.isCompactView() ? 4 : 7;
+    this.dayOffset.update((offset) => offset - step);
   }
 
   nextWeek(): void {
-    this.dayOffset.update((offset) => Math.min(0, offset + 7));
+    const step = this.isCompactView() ? 4 : 7;
+    this.dayOffset.update((offset) => Math.min(0, offset + step));
   }
 
   resetToToday(): void {
