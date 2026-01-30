@@ -6,6 +6,7 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SimpleCounter, SimpleCounterType } from '../simple-counter.model';
 import { SimpleCounterService } from '../simple-counter.service';
@@ -16,7 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSimpleCounterEditComponent } from '../dialog-simple-counter-edit/dialog-simple-counter-edit.component';
+import { DialogSimpleCounterEditSettingsComponent } from '../dialog-simple-counter-edit-settings/dialog-simple-counter-edit-settings.component';
 import { MsToStringPipe } from '../../../ui/duration/ms-to-string.pipe';
+import { EMPTY_SIMPLE_COUNTER } from '../simple-counter.const';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -41,6 +44,7 @@ export class HabitTrackerComponent {
   private _simpleCounterService = inject(SimpleCounterService);
   private _dateService = inject(DateService);
   private _matDialog = inject(MatDialog);
+  private _router = inject(Router);
 
   T = T;
   SimpleCounterType = SimpleCounterType;
@@ -189,5 +193,37 @@ export class HabitTrackerComponent {
 
     const goal = counter.streakMinValue || 1;
     return Math.min(100, (value / goal) * 100);
+  }
+
+  addHabit(): void {
+    const newHabit = {
+      ...EMPTY_SIMPLE_COUNTER,
+      isEnabled: true,
+    };
+
+    this._matDialog.open(DialogSimpleCounterEditSettingsComponent, {
+      data: { simpleCounter: newHabit },
+      restoreFocus: true,
+      width: '600px',
+    });
+  }
+
+  openEditSettings(counter: SimpleCounter): void {
+    const counterCopy = {
+      ...counter,
+      countOnDay: { ...counter.countOnDay },
+    };
+
+    this._matDialog.open(DialogSimpleCounterEditSettingsComponent, {
+      data: { simpleCounter: counterCopy },
+      restoreFocus: true,
+      width: '600px',
+    });
+  }
+
+  openManageHabits(): void {
+    this._router.navigate(['/config'], {
+      queryParams: { tab: 3, section: 'SIMPLE_COUNTER_CFG' },
+    });
   }
 }

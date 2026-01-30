@@ -68,10 +68,17 @@ export class DialogSimpleCounterEditSettingsComponent {
       return;
     }
     const normalized = this._normalizeSettings(this.model);
-    this._simpleCounterService.updateSimpleCounter(
-      this.dialogData.simpleCounter.id,
-      normalized,
-    );
+    if (this.dialogData.simpleCounter.id) {
+      this._simpleCounterService.updateSimpleCounter(
+        this.dialogData.simpleCounter.id,
+        normalized,
+      );
+    } else {
+      this._simpleCounterService.addSimpleCounter({
+        ...this.dialogData.simpleCounter,
+        ...normalized,
+      } as any);
+    }
     this._dialogRef.close(normalized);
   }
 

@@ -18,14 +18,23 @@
         <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
-    <button
-      mat-button
-      (click)="resetToToday()"
-      class="today-btn"
-      [disabled]="dayOffset() === 0"
-    >
-      {{ T.F.SIMPLE_COUNTER.HABIT_TRACKER.TODAY | translate }}
-    </button>
+    <div class="nav-controls">
+      <button
+        mat-button
+        (click)="resetToToday()"
+        class="today-btn"
+        [disabled]="dayOffset() === 0"
+      >
+        {{ T.F.SIMPLE_COUNTER.HABIT_TRACKER.TODAY | translate }}
+      </button>
+      <button
+        mat-icon-button
+        (click)="openManageHabits()"
+        [matTooltip]="T.F.SIMPLE_COUNTER.HABIT_TRACKER.MANAGE_HABITS | translate"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="habit-grid">
@@ -44,6 +53,8 @@
         <div
           class="habit-title"
           [matTooltip]="counter.title"
+          (click)="openEditSettings(counter)"
+          (contextmenu)="openEditSettings(counter); $event.preventDefault()"
         >
           @if (counter.icon && counter.icon.startsWith(':')) {
             <mat-icon
@@ -106,5 +117,19 @@
         }
       </div>
     }
+  </div>
+
+  <div class="footer-actions">
+    <button
+      mat-stroked-button
+      tabindex="1"
+      (click)="addHabit()"
+      class="add-habit-btn"
+    >
+      <mat-icon>playlist_add</mat-icon>
+      <span class="mdc-button__label">{{
+        T.F.SIMPLE_COUNTER.HABIT_TRACKER.ADD_HABIT | translate
+      }}</span>
+    </button>
   </div>
 </div>
