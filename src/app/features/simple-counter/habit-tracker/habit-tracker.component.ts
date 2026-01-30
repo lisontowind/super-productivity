@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
   signal,
@@ -20,8 +21,9 @@ import { DialogSimpleCounterEditComponent } from '../dialog-simple-counter-edit/
 import { DialogSimpleCounterEditSettingsComponent } from '../dialog-simple-counter-edit-settings/dialog-simple-counter-edit-settings.component';
 import { MsToStringPipe } from '../../../ui/duration/ms-to-string.pipe';
 import { EMPTY_SIMPLE_COUNTER } from '../simple-counter.const';
-
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { loadFromRealLs, saveToRealLs } from '../../../core/persistence/local-storage';
+import { LS } from '../../../core/persistence/storage-keys.const';
 
 @Component({
   selector: 'habit-tracker',
@@ -50,12 +52,29 @@ export class HabitTrackerComponent {
   SimpleCounterType = SimpleCounterType;
 
   dayOffset = signal(0);
+  isCompactView = signal(false);
+
+  constructor() {
+    // Load initial compact view state from localStorage
+    const savedCompactView = loadFromRealLs(LS.HABIT_TRACKER_COMPACT_VIEW) as
+      | { value: boolean }
+      | undefined;
+    if (savedCompactView && typeof savedCompactView.value === 'boolean') {
+      this.isCompactView.set(savedCompactView.value);
+    }
+
+    // Persist compact view state changes to localStorage
+    effect(() => {
+      saveToRealLs(LS.HABIT_TRACKER_COMPACT_VIEW, { value: this.isCompactView() });
+    });
+  }
 
   days = computed(() => {
     const days: string[] = [];
     const today = new Date();
     const offset = this.dayOffset();
-    for (let i = 6; i >= 0; i--) {
+    const daysToShow = this.isCompactView() ? 3 : 6; // Show 4 days (0-3) or 7 days (0-6)
+    for (let i = daysToShow; i >= 0; i--) {
       const d = new Date();
       d.setDate(today.getDate() - i + offset);
       days.push(this._dateService.todayStr(d));
@@ -73,6 +92,10 @@ export class HabitTrackerComponent {
 
   resetToToday(): void {
     this.dayOffset.set(0);
+  }
+
+  toggleCompactView(): void {
+    this.isCompactView.update((compact) => !compact);
   }
 
   dateRangeLabel = computed(() => {
